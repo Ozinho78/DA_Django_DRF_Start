@@ -1,0 +1,82 @@
+import os
+import django
+import json
+
+# Setze die Django-Umgebung
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'supermarket.settings')
+django.setup()
+
+from market_app import Market
+
+# Beispiel-Marktdaten
+market_data = [
+    {
+        "name": "Frisch & Gut Markt",
+        "location": "Berliner Straße 45, 10115 Berlin",
+        "description": "Ein moderner Supermarkt mit regionalen Produkten und Bio-Angebot.",
+        "net_worth": "1250000.00"
+    },
+    {
+        "name": "SparOase",
+        "location": "Hauptstraße 22, 50667 Köln",
+        "description": "Günstige Preise und ein breites Sortiment für die ganze Familie.",
+        "net_worth": "890000.00"
+    },
+    {
+        "name": "VitaMarkt",
+        "location": "Marktplatz 1, 80331 München",
+        "description": "Frische Lebensmittel mit Fokus auf Nachhaltigkeit und Gesundheit.",
+        "net_worth": "1740000.00"
+    },
+    {
+        "name": "CityKauf",
+        "location": "Königsallee 99, 40212 Düsseldorf",
+        "description": "Städtischer Supermarkt mit internationalem Sortiment und Feinkostabteilung.",
+        "net_worth": "2100000.00"
+    },
+    {
+        "name": "Lebensmittelpunkt",
+        "location": "Lange Straße 12, 28195 Bremen",
+        "description": "Traditionsreicher Supermarkt mit Fokus auf Kundenservice.",
+        "net_worth": "730000.00"
+    },
+    {
+        "name": "Bio Frischewelt",
+        "location": "Waldweg 5, 37073 Göttingen",
+        "description": "Reines Bio-Sortiment mit regionalen Landwirten als Partner.",
+        "net_worth": "560000.00"
+    },
+    {
+        "name": "Nordmarkt",
+        "location": "Am Hafen 33, 20457 Hamburg",
+        "description": "Großer Markt mit eigener Fischtheke und norddeutschem Flair.",
+        "net_worth": "1950000.00"
+    },
+    {
+        "name": "SüdEinkauf",
+        "location": "Bahnhofstraße 3, 70173 Stuttgart",
+        "description": "Modernes Einkaufszentrum mit großem Supermarktbereich.",
+        "net_worth": "1630000.00"
+    },
+    {
+        "name": "Grüner Korb",
+        "location": "Blumenstraße 17, 90402 Nürnberg",
+        "description": "Nachhaltiger Supermarkt mit plastikfreien Verpackungsoptionen.",
+        "net_worth": "880000.00"
+    },
+    {
+        "name": "Kaufhaus Mitte",
+        "location": "Zentralplatz 1, 56068 Koblenz",
+        "description": "Zentral gelegener Markt mit großem Angebot an Frischware und Haushaltsprodukten.",
+        "net_worth": "990000.00"
+    }
+]
+
+# Importiere die Daten
+for entry in market_data:
+    Market.objects.create(**entry)
+
+print("✔️ Märkte erfolgreich importiert.")
+
+# python import_markets.py
+
