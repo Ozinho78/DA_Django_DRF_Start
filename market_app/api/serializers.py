@@ -35,13 +35,32 @@ class MarketSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Market
-        # fields = ('id', 'name', 'location', 'description', 'net_worth')
-        field = '__all__'
+        fields = ['id', 'name', 'location', 'description', 'net_worth'] # Felder, die angezeigt werden
+        # field = '__all__'
     
     # def validate_location(self, value):
     #     if 'X' in value:
     #         raise serializers.ValidationError('no X in location')
     #     return value
+
+
+class SellerSerializer(serializers.ModelSerializer):
+    markets = MarketSerializer(many=True, read_only=True)
+    market_ids = serializers.PrimaryKeyRelatedField(
+        queryset = Market.objects.all(),
+        many = True,
+        write_only = True,
+        source = 'markets'
+    )
+
+    market_count = serializers.SerializerMethodField()
+    class Meta:
+        model = Seller
+        fields = ['id', 'name', 'market_count', 'markets', 'market_ids', 'contact_info']
+        # exclude = []
+
+    def get_market_count(self, obj):
+        return obj.markets.count()  # Markets werden gezählt
 
 
 class SellerDetailSerializer(serializers.Serializer):
