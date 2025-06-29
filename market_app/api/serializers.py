@@ -32,10 +32,13 @@ class MarketSerializer(serializers.ModelSerializer):
     #     instance.net_worth = validated_data.get('net_worth', instance.net_worth)
     #     instance.save()
     #     return instance
+
+    sellers = serializers.StringRelatedField(many=True, read_only=True)
+    # sellers = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='seller_single_view')
     
     class Meta:
         model = Market
-        fields = ['id', 'name', 'location', 'description', 'net_worth'] # Felder, die angezeigt werden
+        fields = ['id', 'name', 'location', 'description', 'net_worth', 'sellers'] # Felder, die angezeigt werden
         # field = '__all__'
     
     # def validate_location(self, value):

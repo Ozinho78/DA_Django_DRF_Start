@@ -12,6 +12,7 @@ def markets_view(request):
         markets = Market.objects.all()
         serializer = MarketSerializer(markets, many=True)   # da MarketSerializer für ein Element geschrieben wurde, muss man many=True angeben, dann wird es für alle Elemente verwendet und Liste übergeben
         # return Response({"message": "Hello, World!"})
+        # serializer = MarketSerializer(markets, many=True, context={'request': request}) # Context notwendig, da HyperLinkedRelatedField verwendet wird
         return Response(serializer.data)
 
     if request.method == 'POST':
@@ -69,3 +70,10 @@ def sellers_view(request):
         else:
             return Response(serializer.errors)
         
+
+@api_view()
+def seller_single_view(request, pk):
+    if request.method == 'GET':
+        seller = Seller.objects.get(pk=pk)
+        serializer = SellerSerializer(seller)
+        return Response(serializer.data)
