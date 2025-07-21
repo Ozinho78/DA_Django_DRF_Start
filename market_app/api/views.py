@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import MarketSerializer, SellerDetailSerializer, SellerCreateSerializer, SellerSerializer
 from market_app.models import Market, Seller
+from rest_framework.views import APIView
 
 
 # @api_view() # standardmäßig GET-Anfrage
@@ -10,9 +11,9 @@ from market_app.models import Market, Seller
 def markets_view(request):
     if request.method == 'GET':
         markets = Market.objects.all()
-        serializer = MarketSerializer(markets, many=True)   # da MarketSerializer für ein Element geschrieben wurde, muss man many=True angeben, dann wird es für alle Elemente verwendet und Liste übergeben
+        # serializer = MarketSerializer(markets, many=True)   # da MarketSerializer für ein Element geschrieben wurde, muss man many=True angeben, dann wird es für alle Elemente verwendet und Liste übergeben
         # return Response({"message": "Hello, World!"})
-        # serializer = MarketSerializer(markets, many=True, context={'request': request}) # Context notwendig, da HyperLinkedRelatedField verwendet wird
+        serializer = MarketSerializer(markets, many=True, context={'request': request}) # Context notwendig, da HyperLinkedRelatedField verwendet wird
         return Response(serializer.data)
 
     if request.method == 'POST':
@@ -34,7 +35,8 @@ def markets_view(request):
 def market_single_view(request, pk):
     if request.method == 'GET':
         market = Market.objects.get(pk=pk)
-        serializer = MarketSerializer(market)
+        # serializer = MarketSerializer(market)
+        serializer = MarketSerializer(market, context={'request': request})
         return Response(serializer.data)
     
     if request.method == 'PUT':
@@ -75,5 +77,5 @@ def sellers_view(request):
 def seller_single_view(request, pk):
     if request.method == 'GET':
         seller = Seller.objects.get(pk=pk)
-        serializer = SellerSerializer(seller)
+        serializer = SellerSerializer(seller, context={'request': request})
         return Response(serializer.data)
