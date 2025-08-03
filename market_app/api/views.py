@@ -60,6 +60,11 @@ class MarketSellerView(generics.ListCreateAPIView):
         market = Market.objects.get(pk=pk)
         return market.sellers.all()
     
+    def perform_create(self, serializer):
+        pk = self.kwargs['pk']  # get the id from the url
+        market = Market.objects.get(pk=pk)
+        serializer.save(markets=[market]) # add the market to the serializer data
+    
     
     
     
