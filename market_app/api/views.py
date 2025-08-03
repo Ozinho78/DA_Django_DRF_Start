@@ -1,11 +1,48 @@
 from rest_framework.decorators import api_view
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+from rest_framework import viewsets
 from rest_framework import status
-from .serializers import MarketSerializer, SellerDetailSerializer, SellerCreateSerializer, SellerSerializer, MarketHyperlinkedSerializer, SellerListSerializer
-from market_app.models import Market, Seller
+from .serializers import MarketSerializer, SellerDetailSerializer, SellerCreateSerializer, SellerSerializer, MarketHyperlinkedSerializer, SellerListSerializer, ProductSerializer
+from market_app.models import Market, Seller, Product
 from rest_framework.views import APIView
 from rest_framework import mixins
 from rest_framework import generics
+
+
+# ModelViewSet
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+
+# ViewSet, ganze Liste und einzelne Objekte in einem Set, zusammen genutzt mit Router
+class ProductViewSetOld(viewsets.ViewSet):
+    # http://127.0.0.1:8000/api/products/
+    queryset = Product.objects.all()
+    
+    def list(self, request):    
+        serializer = ProductSerializer(self.queryset, many=True)
+        return Response(serializer.data)
+    
+    def create(self, request):
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, pk=None):
+        product = get_object_or_404(self.queryset, pk=pk)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None):
+        product = get_object_or_404(self.queryset, pk=pk)
+        serializer = ProductSerializer(product)
+        product.delete()
+        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
 
 # class MarketsView(APIView):
@@ -64,12 +101,6 @@ class MarketSellerView(generics.ListCreateAPIView):
         pk = self.kwargs['pk']  # get the id from the url
         market = Market.objects.get(pk=pk)
         serializer.save(markets=[market]) # add the market to the serializer data
-    
-    
-    
-    
-    
-    
     
     
     

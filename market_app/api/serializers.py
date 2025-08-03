@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from market_app.models import Market, Seller
+from market_app.models import Market, Seller, Product
 
 
 def validate_no_x(value):
@@ -113,3 +113,9 @@ class SellerListSerializer(SellerSerializer):
     class Meta:
         model = Seller
         fields = ['id', 'name', 'market_count', 'contact_info']
+        
+        
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
