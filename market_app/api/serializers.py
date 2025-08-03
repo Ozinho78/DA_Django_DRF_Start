@@ -107,3 +107,9 @@ class SellerCreateSerializer(serializers.Serializer):
         markets = Market.objects.filter(id__in=market_ids)
         seller.markets.set(markets) # Zuordnung von Seller zu den Märkten
         return seller
+
+
+class SellerListSerializer(SellerSerializer):
+    class Meta:
+        model = Seller
+        fields = ['id', 'name', 'market_count', 'contact_info']
